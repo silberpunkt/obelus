@@ -1,0 +1,645 @@
+# YOWL.yaml — Your Own Word List
+# card: word, art (5 lines), from, say.  section starts a run.
+#
+# colour, two ways. either alone is enough; paint wins if both are present.
+#
+#   paint       runs of glyphs = a pigment.  !name sets the headline pigment.
+#               legible, editable, the authoring form.
+#   colorburst  periods under the illustration. slot 0 = headline, then one
+#               slot per DISTINCT glyph of the art in first-appearance order
+#               (row-major, spaces skipped). the art is the key; the burst is
+#               only the values. marks below each period are base-16 digits,
+#               big-endian, one or two; the grapheme cluster delimits itself.
+#
+#               a leading BARE period switches the burst to positional mode:
+#               ". .head .cell .cell …" — one slot per inked cell, row-major.
+#               that is how a painting is stored. see HAYSTACK.
+#
+# digits, in value order — all combining class 220, so NFC never reorders them:
+#  0 U+0316  1 U+0317  2 U+031C  3 U+031D  4 U+031E  5 U+031F  6 U+0320  7 U+0323
+#  8 U+0324  9 U+0325 10 U+0326 11 U+0329 12 U+032C 13 U+032D 14 U+032E 15 U+0330
+#
+# no colour at all is fine. the card still sings, in ink.
+
+# ---- YAM-PAL ----------------------------------------------------------
+# position is the index; the index is the format. this block is the whole
+# colour authority: rewrite a line, or rewrite all of them, and every burst
+# in the file resolves against what you say here.
+palette:
+  - "ink        #cfcbc2"
+  - "hero       #fff4d6"
+  - "star       #dbe8ff"
+  - "sky        #9fc6ff"
+  - "fire       #ff8a3c"
+  - "water      #58bff0"
+  - "deep       #2b7fb8"
+  - "leaf       #6fd66f"
+  - "bark       #a8825a"
+  - "earth      #8a6b4a"
+  - "grain      #e8be5a"
+  - "gold       #ffd23f"
+  - "flesh      #e0947e"
+  - "stone      #8f98a5"
+  - "thread     #c9a9e8"
+  - "blood      #ff5c72"
+  - "breath     #bfeae0"
+  - "bone       #efe6d2"
+  - "metal      #9fb6c9"
+  - "salt       #ffffff"
+  - "cut        #ff4d4d"
+  - "shadow     #565b64"
+  - "rose       #e8a39c"
+  - "amber      #f2c48a"
+  - "sunlit     #fff3c4"
+  - "mauve      #8f7aa8"
+  - "hay        #e3a33f"
+  - "hayshade   #6e5a8a"
+  - "field      #c9a24a"
+  - "fieldshade #7a6a9a"
+  - "black      #000000"
+
+# ONE VALID YAML DOCUMENT: palette, then cards. The loose form —
+# cards as a bare top-level sequence — still loads here, but only
+# here. This form loads in any YAML parser anywhere.
+cards:
+  - section: "THE SIGN"
+    word: "OBELUS"
+    anglo: "OB-el-us"
+    art:
+      - "     ●     "
+      - "           "
+      - " ━━━━━━━━━ "
+      - "           "
+      - "     ●     "
+    paint: "!hero ●=gold ━=salt"
+    from: "Greek obelos, a roasting spit. Zenodotus set a plain stroke beside a line of Homer he doubted. The stroke with a dot above and a dot below came later, and in 1659 Johann Rahn took it for division"
+    say: "A dot above, a line, a dot below. The line is a text being read. The dots are what the text sifts out of itself as it goes."
+    longtext: |
+      Obelus is one page that reads any text you give it and shows, at
+      every moment, what that text has so far made of itself.
+      The line across the middle is the text, one word after another.
+      Above the line rises everything the text says that the world
+      seldom says, narrowing to a single word. Below the line hangs
+      everything the text shares with every other text, narrowing to a
+      single word. The upper dot is this text divided by the world. The
+      lower dot is the world.
+      Nothing is asserted by the page. It counts, it forgets slowly, it
+      divides, and it sets the result in type. What you read off it is
+      yours.
+
+  - word: "TYPELINE"
+    anglo: "TYPE-line"
+    art:
+      - "  ─────── "
+      - "          "
+      - "━━━━━━━━━━"
+      - "    ▔▔    "
+      - "  ─────── "
+    paint: "!salt ━=salt ▔=hero ─=shadow"
+    from: "type, Greek typos, a blow and the mark it leaves; and line, Latin linea, a linen thread"
+    say: "Three lines, one text. What is about to be said waits above; what is being said passes large through the middle; what has just been said rests below."
+    longtext: |
+      The middle line is the only thing on the page that is being said.
+      The word under the centre is ruled beneath. Words come in whole at
+      the right when there is room for all of them, and are excused
+      whole at the left; none is ever cut.
+      The lighter line above holds the words about to enter, and the
+      lighter line below holds the words that have just left. It is one
+      strip of text threaded through all three, so the eye always has a
+      sentence of context on either side of the moment.
+      Time on this page is distance along that strip. That is why the
+      line moves steadily whatever the lengths of the words, and why
+      everything else on the page can be geared to it.
+
+  - word: "MOT JUSTE"
+    anglo: "moh ZHOOST"
+    art:
+      - "     ◆     "
+      - "    ╱ ╲    "
+      - "   ◇   ◇   "
+      - "  ╱     ╲  "
+      - " ◇   ◇   ◇ "
+    paint: "!gold ◆=gold ◇=sunlit ╱╲=stone"
+    from: "French, the exact word; Flaubert's phrase for the one word that fits"
+    say: "The upper dot. The one word that, just now, this text says most and the world says least."
+    longtext: |
+      Every word that is not mortar is given a standing: how much it has
+      been said here lately, multiplied by how rare it is in the world
+      at large. The word with the greatest standing stands alone at the
+      top. Under it are two in silver, then three in bronze, then five,
+      eight, thirteen, and at the widest ribbon the twenty-one common
+      words the text leans on.
+      Fine rules hang from the three highest ribbons to the words found
+      beside them most often. Those are the shoulders they sit on.
+      The mot juste does not keep its place by right. When another word
+      outruns it, it steps down, and the new word takes the height. It
+      is set smaller than the typeline on purpose: the line is what is
+      being said; the dot is only what was sifted from it.
+
+  - word: "PENDULE"
+    anglo: "PON-dyool"
+    art:
+      - " ◇   ◇   ◇ "
+      - "  ╲     ╱  "
+      - "   ◇   ◇   "
+      - "    ╲ ╱    "
+      - "     ◆     "
+    paint: "!stone ◆=salt ◇=stone ╱╲=shadow"
+    from: "French pendule, from Latin pendulus, hanging, from pendere, to hang. User1 hung it from the Prependule above"
+    say: "The lower dot. The one word this text shares most completely with every other text. It is usually THE."
+    longtext: |
+      Below the line the same sifting is run the other way. Here stand
+      only the little words, and the more of the world a word is, the
+      lower it hangs, down to one.
+      In most English texts that one is "the", and it never changes.
+      That is an honest finding and also a dull one, and User1 has named
+      what should one day stand in its place: pairs of words, juxts,
+      sifted downward until the one couple is found that grounds the
+      top and reveals it. That is not built. Today the lower cone is
+      the mortar, as described.
+
+  - section: "THE SIFTING"
+    word: "FLYWHEEL"
+    anglo: "FLY-wheel"
+    art:
+      - "   ╭───╮   "
+      - "  ╱  │  ╲  "
+      - " ╎ ──●── ╎ "
+      - "  ╲  │  ╱  "
+      - "   ╰───╯   "
+    paint: "!metal ╭─╮│╎╰╯╱╲=metal ●=fire"
+    from: "English, fly and wheel: the heavy wheel that keeps a machine's pace even between strokes"
+    say: "Every word said adds one to its own count. All counts fade by half over a set stretch of words. That is the whole memory of the page."
+    longtext: |
+      The stretch is a tenth of the text, and never more than twenty
+      thousand words. A word said often and lately rides far from the
+      line. A word left unsaid drifts back toward it and at last leaves
+      the cone.
+      Because the memory fades, the page has a present. Pull the slider
+      to any word and the cones are rebuilt as they stood at that word,
+      with all that had been said by then and half forgotten.
+
+  - word: "MORTAR"
+    anglo: "MOR-ter"
+    art:
+      - "▓▓▓ ▓▓▓ ▓▓▓"
+      - "───────────"
+      - "▓ ▓▓▓ ▓▓▓ ▓"
+      - "───────────"
+      - "▓▓▓ ▓▓▓ ▓▓▓"
+    paint: "!bone ▓=earth ─=bone"
+    from: "Latin mortarium, the trough the mix was made in, and then the mix itself"
+    say: "The little words every text is laid in: the, of, and, to, is. They hold the bricks apart and together, and carry no sense of their own."
+    longtext: |
+      The page knows about two hundred of them by name. They are kept
+      out of the upper cone entirely, however often they are said, and
+      given the lower cone to themselves.
+      The world's rate for every other word comes from a list of some
+      5,900 English words built into the page. A word the list does not
+      hold is treated as rare.
+
+  - word: "RIBBON"
+    anglo: "RIB-un"
+    art:
+      - "    ╭─╮    "
+      - "  ╭─────╮  "
+      - " ╭───────╮ "
+      - "╭─────────╮"
+      - "╰─────────╯"
+    paint: "!thread ╭─╮╰╯=thread"
+    from: "Middle English riban, from Old French riban, a band"
+    say: "Each rank of words is a ring that turns. Seven rings narrowing upward make the upper cone; seven narrowing downward make the lower."
+    longtext: |
+      The rings do not turn by a clock. The front of the widest ring
+      travels exactly as fast as the typeline, so when the line stops
+      the cones stop, and when the line is thrown backward they turn
+      backward. The whole figure is one top, spinning on the line.
+      Every word faces you, upright, wherever it is on its ring. Where
+      it is on the round is told by its light alone: full at the front,
+      less at the sides, faint at the back. Each word at the front
+      carries a soft halo the colour of the ground, so that it quiets
+      whatever lies behind it.
+      Tilt tips the whole figure toward you and opens the rings into
+      ovals.
+
+  - word: "ASCENDED"
+    anglo: "uh-SEN-ded"
+    art:
+      - " ·  ·  ·  ·"
+      - "·    ◆    ·"
+      - " ·  ·  ·  ·"
+      - "           "
+      - "           "
+    paint: "!sunlit ◆=gold ·=sunlit"
+    from: "Latin ascendere, to climb up, from scandere, to climb"
+    say: "Every word that has ever stood highest is remembered in a ring about the height. Every word that has ever hung lowest is kept in a ring about the depth: the Descended."
+    longtext: |
+      The whole text is run through once, when it is first given, to
+      learn who will ever wear the crown and from when. As time passes
+      on the line, each takes a seat in the ring at the moment it first
+      ascended. The one standing at the height now is not in the ring;
+      it returns to its seat when it steps down.
+      A ring has thirty-six seats. In a text where more than thirty-six
+      have ascended, the later comer takes the seat.
+      The rings are flat, two thirds the width of the typeline, and
+      their rims travel at the line's own pace.
+
+  - section: "THE TEXT ITSELF"
+    word: "RESERVOIR"
+    anglo: "REZ-er-vwar"
+    art:
+      - "    ▒▒▒    "
+      - "    ▒▒▒    "
+      - " ━━━━━━━━━ "
+      - "    ░░░    "
+      - "    ░░░    "
+    paint: "!water ▒=water ░=deep ━=salt"
+    from: "French reservoir, from reserver, Latin reservare, to keep back"
+    say: "One column of small real type down the axis. Above the lines, what is yet to say. Below them, what has been said. The text falls through the lines like sand."
+    longtext: |
+      The upper column rests its foot on the three lines and its
+      surface sinks. The lower column hangs from just under them and
+      lengthens downward. Each carries a count.
+      Click the column to change between the sum, where each pile is as
+      tall as its share of the whole text, and pages, where both are
+      full and scroll.
+      It is real type, tinted as the typeline is, never grey bars
+      pretending to be text.
+
+  - word: "THROW"
+    anglo: "throh"
+    art:
+      - "           "
+      - " ◁━━━━━━▷  "
+      - "     ◆     "
+      - " ◁━━━━━━▷  "
+      - "           "
+    paint: "!flesh ◆=flesh ━=salt ◁▷=fire"
+    from: "Old English thrawan, to twist, to turn; a potter still throws a pot by turning it"
+    say: "The line is tangible. Click it and time glides to a stop; click again and it goes. Hold it, draw it either way, and let go moving: it is thrown, and keeps the pace it was thrown at."
+    longtext: |
+      There is no friction on the page, only weight. A thrown line runs
+      on at its pace, forward or back, until a hand stops it.
+      The reservoir is a Yankee screwdriver: hold it and move up or
+      down, and the text is driven through the lines under your hand.
+      Downward is onward.
+      One list, in plain words, says how time meets the ends of the text. Once, onward
+      or backward: at the end it stops, and stays. Repeat, onward or
+      backward: at the end it takes a breath and begins again. Bounce:
+      it turns at both ends and keeps its pace.
+
+  - section: "THE SENSES"
+    word: "LILT"
+    anglo: "lilt"
+    art:
+      - " ee        "
+      - "    eh     "
+      - "       ah  "
+      - "    oh     "
+      - " oo        "
+    paint: "!amber e=gold h=fire a=blood o=mauve"
+    from: "Middle English lulten, to lift up the voice; where that came from is not known"
+    say: "Each word is tinted by its own vowels. No recording is consulted. The page reads the letters, finds the sounds, and takes the colour from the sounds."
+    longtext: |
+      The reading is done by Ecouter's Lexillogue, which turns letters
+      to phonemes by the Naval Research Laboratory's rules of 1976.
+      The vowels are set round a colour barrel in the order the mouth
+      makes them: ee is yellow, through eh and a to ah, which is red,
+      through aw and oh to oo, which is blue. The neutral vowels, uh
+      and er, carry no hue and thin the tint. So "moon" is blue, "body"
+      is orange, and "the" has no colour at all.
+      Saturation sets how strongly the tint shows. Gray turns it off,
+      so that you can find out what you had been seeing.
+      Inside a pair of quotation marks the line is lifted a little, as
+      a reader lifts the voice.
+
+  - word: "TAPE"
+    anglo: "tayp"
+    art:
+      - " ◯       ◯ "
+      - "╱ ╲     ╱ ╲"
+      - "╲ ╱━━▼━━╲ ╱"
+      - " ◯       ◯ "
+      - "           "
+    paint: "!bark ◯╱╲=bark ━=amber ▼=cut"
+    from: "Old English taeppe, a strip of cloth"
+    say: "The typeline is a tape and the centre is the head. At the spoken pace it speaks at true pitch. Faster, it rises. Slower, it falls. Backward, it speaks backward."
+    longtext: |
+      Speech is off until asked for. When it is on, each sentence is
+      given whole to Ecouter's voice, so its words run together and it
+      has its tune: a fall at a full stop, a lift at a question. Then
+      every word in it is stretched or eased until it lasts exactly as
+      long as that word is wide on the line. After that, the sound is
+      simply read off the place the line is at.
+      That is how a reel-to-reel machine behaves, and it is why the
+      voice can be whipped, scratched and run backward without any
+      special arrangement.
+      The singing is done a sentence or two ahead of the head, on a
+      second thread, like track laid just in front of a moving train.
+
+  - word: "FLEURIANT"
+    anglo: "FLUR-ee-ont"
+    art:
+      - "▂▅▂ ╭─╮ ▂▅▂"
+      - "▃▆▃ │◎│ ▃▆▃"
+      - "▂▅▂ ╰─╯ ▂▅▂"
+      - "           "
+      - "           "
+    paint: "!leaf ▂▃=water ▅▆=leaf ╭─╮│╰╯=stone ◎=rose"
+    from: "User1's word, on French fleurir, to flower: the sound of a word seen opening as rings"
+    say: "The strip across the top is the line's sound drawn as light: colour is pitch, brightness is strength, sparks are hiss. At its centre, the fleuriant: each sound a ring, spreading, fading."
+    longtext: |
+      Both are Nuage's, brought here whole. Both are read from the
+      line's place and not from a clock, so they run in silence as well
+      as in speech, stop when the line stops, and run backward when it
+      does.
+      The strip names each sound above and each word beneath. It leaves
+      the fleuriant to the left and, mirrored exactly, to the right:
+      sound goes out from a centre.
+
+  - word: "FLARE"
+    anglo: "flair"
+    art:
+      - "██▀▀▀◎▀▀▀██"
+      - "▀         ▀"
+      - " ━━━━━━━━━ "
+      - "▄         ▄"
+      - "██▄▄▄◎▄▄▄██"
+    paint: "!breath █▀▄=water ◎=rose ━=salt"
+    from: "Of unknown origin: first a spreading flame, then anything that widens as one does"
+    say: "With the bars put away, the strip of sound widens downward toward both ends, following the upper ring, and the strip at the foot widens upward, into the Inrose."
+    longtext: |
+      Each column of the straight strip is stretched, pixel by pixel,
+      by as much as the far side of the ring has fallen away beneath it:
+      nothing at the centre, more toward the sides. Past the ring it
+      runs on as a skier leaves a hill, and the fall goes on to the
+      window's edge. The letters in the strip grow taller with it.
+      The strip at the foot is the same sound coming in again, and at
+      its centre is the Inrose, the rose that receives. User1: sound
+      does expand as it leaves the source; reciprocally, from
+      everywhere, sound is gathered into one's own ears.
+      With the bars showing, the strip is straight.
+
+  - word: "MEMORY"
+    anglo: "MEM-or-ee"
+    art:
+      - "  ░░▒▒░░   "
+      - " ░▒▓▓▓▒░   "
+      - "░▒▓███▓▒░  "
+      - " ░▒▓▓▓▒░   "
+      - "  ░░▒▒░░   "
+    paint: "!shadow ░=shadow ▒=stone ▓=mauve █=bone"
+    from: "Latin memoria, from memor, mindful. It was first called the Impression: Latin imprimere, to press into"
+    say: "A faint keeping of everything that has passed, laid behind the present. Each place is shown in the average colour of all that has stood there."
+    longtext: |
+      Ten times a second, while time is moving, the picture of the
+      cones is added to a running sum, every picture weighing the same.
+      The sum is shown behind the live picture, soft, as a palimpsest
+      is. Its slider sets how strongly. To the mark at 78 in the hundred
+      it only shows more; past the mark its faintest traces are raised
+      as well.
+      It looks only backward. It begins again when the text begins
+      again.
+
+  - word: "BLOTTER"
+    anglo: "BLOT-er"
+    art:
+      - "▓▓▓▓▓▓▓▓▓▓▓"
+      - "▓▓▓▓▓▓▓▓▓▓▓"
+      - " ━━━━━━━━━ "
+      - "▓▓▓▓▓▓▓▓▓▓▓"
+      - "▓▓▓▓▓▓▓▓▓▓▓"
+    paint: "!black ▓=shadow ━=salt"
+    from: "blot, Middle English, of unknown origin; the soft paper that takes up what is not wanted"
+    say: "One slider that lowers the light of everything that is not the text. The reservoir holds out longest; fully on, only the line being said remains."
+    longtext: |
+      It touches no process. The cones go on turning and the Memory
+      goes on keeping while they are blotted. It is there for the
+      moment when you want to read, and for the moment after, when you
+      want to see what the reading was standing in.
+
+  - section: "THE GROUND AND ITS GRAIN"
+    word: "MITTEL"
+    anglo: "MIT-el"
+    art:
+      - "   ◇ ◇ ◇   "
+      - "▒▒▒▒▒▒▒▒▒▒▒"
+      - " ━━━━━━━━━ "
+      - "▒▒▒▒▒▒▒▒▒▒▒"
+      - "   ◆ ◆ ◆   "
+    paint: "!stone ◇=salt ◆=black ▒=stone ━=salt"
+    from: "German Mittel, the middle, and the means. User1 found it at a light table: begin from middle grey, and step to light or to dark from there"
+    say: "Three grounds, chosen from the Theme list: Night, light on black; Day, black on white; Mittel, middle grey, with light above the line and shade below it."
+    longtext: |
+      On Night and Day there is one way for a mark to stand off its
+      ground. On Mittel there are two, and the page uses both: what is
+      yet to come stands lighter than the grey, what has been said stands
+      darker, and the word being said is white.
+      The Theme list shows the ground you are on. The page opens on
+      Mittel.
+      Each ground keeps its own setting for how much of the Scintillar is
+      white, because the same share does not sit level on all three.
+
+  - word: "SCINTILLAR"
+    anglo: "SIN-til-ar"
+    art:
+      - " ▁▁▁▁▁▁▁▁▁▁▁▂▃▃▄▅▆▇▇███▇▇▆▅▄▃▃▂▁▁▁▁▁▁▁▁▁▁▁"
+      - "  █░█░█░█░█    █░░██░░░███░█    ▒█░▓░█▓▒░"
+      - "  law alone   law over chance  chance alone"
+      - "  no surprise  the Scintillar    no shape"
+      - "  simple           deep        featureless"
+    paint: "!bone ▁▂▃▄▅▆▇=gold █=bone ░=shadow ▒▓=stone"
+    from: "Latin scintilla, a spark. User1's name for the lozenge of single pixels that lies under the word being said"
+    say: "A lozenge of single pixels, each black or white. Every frame every pixel turns over, save those told by lot to wait, so that the white keeps exactly the share you set."
+    longtext: |
+      Two pyramids of pixels, base to base, 144 across. Left to itself
+      a field that turns over every frame is a flat flicker. So some are
+      told: wait a turn. How many is reckoned afresh each frame; which
+      ones is drawn by lot. See LOT.
+      From that one rule each pixel gets a memory nobody wrote for it.
+      A white pixel is dark the next frame for certain, and back the
+      frame after about six times in ten. It keeps a beat for a handful
+      of frames, then slips. That was measured, in the page and in a
+      recording of it. The lumps you think you see are there.
+      The picture above says where that sits. A checker is all law and
+      has no surprise. Plain noise is all chance and has no shape. Depth
+      is in the middle, where a strict law rides a small chance.
+      It opens so faint that it is barely seen. User1, of what it is
+      for: it says to the eye, before any thought, you are known and
+      warmly accommodated.
+
+  - word: "LOT"
+    anglo: "lot"
+    art:
+      - " one fixed seed        the Bow"
+      - " A ░░░██░█░███░░░█░    A ▓░░▓▓░░░▓▓▓░▓▓░░"
+      - " B ░░░██░█░███░░░█░    B ▓▓░▓░▓▓▓▓░░░▓░▓▓"
+      - " the same ants         never twice"
+      - " sixteen pixels at the fortieth frame, two loads each"
+    paint: "!bone █=bone ▓=water ░=shadow"
+    from: "Old English hlot, the token cast to decide a share"
+    say: "Which pixels wait is drawn by lot, and the lot has three sources: Text, the bits of the words themselves; Cinders, one fixed seed; Cindy's Bow, the machine's own chance."
+    longtext: |
+      Text is the first, and how the page opens. Each word, as it
+      reaches the line, gives its bits, in order, into a ring of 16,384.
+      The Scintillar reads round the ring in single file and hands each
+      bit back as it found it. A lot is those bits read as a fraction
+      and set against the share that must wait: about two bits a lot.
+      Nothing is hashed or stirred. When the line stands still, nothing
+      new comes, and it reads round what it has.
+      Text is not a fair coin, so a slow trim leans against it and the
+      share still holds. What remains shows in the numbers: neighbours
+      along a row lean a little apart, where the other two lots show
+      nothing. That is the text's own grain.
+      Cinders is one fixed seed, begun again from the checker each time
+      it is chosen: the same seethe for every reader. The picture above
+      is measured: two loads of the page, the same sixteen pixels.
+      Cindy's Bow is never twice the same. See CINDY'S BOW.
+
+  - word: "CINDY'S BOW"
+    anglo: "SIN-deez boh"
+    art:
+      - " well  ███████████     128 ╮"
+      - " clock ▓▓▓▓▓▓▓▓▓▓▓▓▓   161 ┼─►◄─► lot"
+      - " text  ▒▒▒              32 ╯ holds 128"
+      - " given 321 bits in five seconds"
+      - " no hand, no names: nothing of the person"
+    paint: "!bone █=water ▓=amber ▒=leaf ╮┼╯─=metal ►◄=gold"
+    from: "User1's name and his brief for it: a simple wrap-up of those noise sources one function may make and note, and co-note if called again"
+    say: "A knot of four words that gathers what the machine cannot know beforehand, and keeps a ledger of how much it was given and from where. It asks nothing of the person."
+    longtext: |
+      Three things are tied into the knot. The system's own well of
+      chance, asked once: 128 bits. The clock's low digits, a bit a
+      frame, and only when the interval was not the last one over again.
+      And the text being read, a bit a word, thirty-two at most.
+      The knot can hold 128 bits however many it is given, and the
+      ledger says so. It is in the hover text of the Bow's button, and
+      it climbs as you watch.
+      The first Bow also listened to the pointer and the keys, and took
+      the machine's names to tell one machine from another. User1 had
+      both taken out the same evening: we ask nothing of the hand, or
+      the uniquities of any person. So it sets no listener and reads
+      nothing about who or what is looking.
+      It is a lot-drawer for a picture, not a keeper of secrets.
+
+  - word: "CO-NOTE"
+    anglo: "KOH-noht"
+    art:
+      - " ╭────────╮    a draw    ╭───────╮"
+      - " │ knot   │─────────────►│ a lot │"
+      - " │  ►◄    │◄─────────────│       │"
+      - " ╰────────╯ that it was  ╰───────╯"
+      - "            asked, and when"
+    paint: "!bone ╭─╮│╰╯=metal ►◄=gold"
+    from: "User1, of the Bow: and co-note if called again. Latin con-, together, and nota, a mark"
+    say: "Drawing a lot is itself noted, by the count of draws and by the clock. So a run cannot be played over: to play it over is to call again."
+    longtext: |
+      Most makers of chance can be wound back and run again, and give
+      the same numbers. This one cannot, because asking is an event it
+      remembers. Every thousandth draw the clock is stirred in, and the
+      count of draws with it.
+      For those stirrings nothing is claimed in the ledger. They fall
+      inside one frame, too close together for the clock to tell apart.
+
+  - word: "RUGLET"
+    anglo: "RUG-let"
+    art:
+      - "     ░     "
+      - "   ░▒▓▒░   "
+      - " ░▒▓ ◆ ▓▒░ "
+      - "   ░▒▓▒░   "
+      - "     ░     "
+    paint: "!rose ░=mauve ▒=rose ▓=water ◆=salt"
+    from: "English rug, with the small ending -let. User1 asked for a carpet-edge for the carpet"
+    say: "A lozenge twice the Scintillar's, laid beneath it. Each square of it belongs to one pixel above and keeps four memories of that pixel, nowhere but in its own colour."
+    longtext: |
+      Red is which beat the pixel has lately been white on, over about
+      four frames. Blue is the same, over about sixteen. Green is how
+      much of its share of white it has had, over about eight. And how
+      solid it stands is the beat again, over about thirty-two.
+      A pixel long on one beat is plain light or dark. One that has just
+      slipped is red against its own blue. There is no table behind the
+      picture. The picture is the table.
+      Farbtemp moves where red and blue come to rest. To the right warm,
+      the pink of a satin blanket; to the left cool, toward dark blue.
+      The memories take a moment to follow.
+      Turn it down until you are not sure it is there. That is where it
+      does its work.
+
+  - section: "THE HAND"
+    word: "EDITING"
+    anglo: "ED-it-ing"
+    art:
+      - "         ▏         "
+      - " done    ▏  to come"
+      - "━━━━━━━━━▏━━━━━━━━━"
+      - " left    ▏    right"
+      - "         ▏         "
+    paint: "!stone ▏=gold ━=salt"
+    from: "Latin edere, to give out, to put forth"
+    say: "A typewriter for the text where it stands. Click between two letters and the line slips until that place is under the bar. The bar never moves; the line does."
+    longtext: |
+      It is under Editing in the menubar, and the line must be halted.
+      Point between two letters of the middle line and a hairline shows.
+      Click it: it blinks at the centre, and the keys are yours. Left of
+      the bar is done; right of it is to come.
+      With Speech on, a space says the word just closed, and a full stop
+      says the sentence. Backspace carves back in silence. Ctrl+Z goes
+      back to where you clicked, or to the last space.
+      No key reads the whole text again. Each mends its own word in
+      place. Only when the keys have rested, with no word standing open,
+      is the text read through, and that is when a new word joins the
+      flywheel or a carved one leaves it.
+      New File gives a clean sheet: the bar alone, at the centre. A
+      click in the open picture lets the keys go. What you wrote stays.
+
+  - word: "TEXT WINDOW"
+    anglo: "tekst WIN-doh"
+    art:
+      - "   ·  ◆  ·   "
+      - " ━━━━━━━━━━━ "
+      - "▄▄▄▄▄▄▄▄▄▄▄▄▄"
+      - "░ Engage ░░░░"
+      - "░░░░░░░░░░░░░"
+    paint: "!sky ▄=water ░=shadow ━=salt ◆=gold ·=stone"
+    from: "Latin textus, a thing woven; Old Norse vindauga, the wind's eye"
+    say: "A second screen drawn up from the foot of the window, as on an Amiga: a toolbar and a page of plain text, at any height from nothing to the whole window."
+    longtext: |
+      Hover at the foot and a blue line shows. Take it and draw up,
+      or click it and the window comes to where it last stood. A click
+      on its top edge puts it away again. What you were typing is kept.
+      It covers the picture and does not disturb it.
+      Engage reads the page of text into Obelus and leaves the window
+      standing, so you can write below and watch above. Cancel closes it
+      and drops what was typed. Guide brings back the page's own text.
+      Revert brings back what was last engaged, before any editing on
+      the line. B and I set a star or an underline at each end of what
+      is selected.
+      Nothing leaves the page. An engaged text is kept in the browser,
+      with your place in it.
+
+  - section: "THE CLOSE"
+    word: "CORONIS"
+    anglo: "kor-OH-nis"
+    art:
+      - "       ┼"
+      - "     ──┼──"
+      - "  ╰────┼────╮"
+      - "     ──┼──"
+      - "       ┼"
+    paint: "!gold ┼─╰╮=gold"
+    colorburst: ".̩.̩.̩.̩.̩"
+    from: "Greek koronis, curved, crook-beaked: the flourish or couron a scribe drew where a work ended"
+    say: "The obelus doubts a line. The coronis says the work is done. Unicode keeps both: the dotted obelos at 2E13, the editorial coronis at 2E0E."
+    longtext: |
+      The page is called Obelus for the sign, and the sign is called
+      obelus for the spit. It is also, by its maker's own note at the
+      head of the file, spun in honor and form of Obelix, a Free Gaul
+      of Armorica, who fell into the cauldron as a child and never lost
+      the strength of it.
+      Coronis was also a woman: a princess of Thessaly, loved by Apollo,
+      and by him the mother of Asclepius the healer, whom the god lifted
+      unborn from her pyre. Her name is the same word, the curved one.
+      So the mark that closes a work carries in its curve a mother, and
+      the saving of what she bore.
+      It is one file. Nothing is fetched, and it needs no server.
