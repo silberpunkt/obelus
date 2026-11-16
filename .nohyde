@@ -1,0 +1,3 @@
+Jekyll is kept out by .nojekyll, the file beside this one, which GitHub Pages reads.
+This one keeps out Hyde. Nothing reads it, and nothing depends on it.
+(User1, 16 xi 2026: "if one is warding off horrors, a .nohyde file seems more appropriate, even in quiet jest.")

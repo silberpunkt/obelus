@@ -89,7 +89,7 @@ button.on { border-color: var(--hi); color: var(--hi); }
 #barrow::-webkit-scrollbar, #surfoot::-webkit-scrollbar, #menu::-webkit-scrollbar, #toggles::-webkit-scrollbar, #fontbar::-webkit-scrollbar, #viewbar::-webkit-scrollbar, #numbar::-webkit-scrollbar { display: none; }
 #barrow > *, #surfoot > *, #menu > *, #toggles > *, #fontbar > *, #viewbar > *, #numbar > * { flex: 0 0 auto; }
 #barrow { flex: 1 1 100%; min-width: 0; display: flex; align-items: center; gap: 8px; }
-#surfoot > :first-child, #fontbar > :first-child, #viewbar > :first-child, #numbar > :first-child { margin-left: auto; } #fontbar > :last-child, #viewbar > :last-child { margin-right: auto; }   /* centred, or set to the right, while there is room; from the left edge when there is not, so that all of it can be reached */
+#surfoot > #where + label, #fontbar > :first-child, #viewbar > :first-child, #numbar > :first-child { margin-left: auto; } #fontbar > :last-child, #viewbar > :last-child { margin-right: auto; }   /* centred, or set to the right, while there is room; from the left edge when there is not, so that all of it can be reached */
 #numbar::before { content: ''; flex: 0 0 73px; }   /* the Reset's own width, kept at the other end, so the row stays centred in the bar */
 #toggles { max-width: calc(100% - 16px); } #toggles.row2 { left: 0; right: 0; max-width: none; padding: 0 8px; background: var(--bg); border-bottom: 1px solid var(--line); box-sizing: border-box; } #toggles.row2 > :first-child { margin-left: auto; }
 #voice, #speech, #lilt { color: var(--go); }   /* who speaks, and that he may: in light green, to draw the eye */
@@ -183,7 +183,7 @@ html.mid #drawer, html.mid #txt { background: #b8b8b8; }   /* on Mittel the text
   <span style="flex:0 0 78px"></span><button id="reset" type="button" title="Every setting of the page and the view back to how it first comes. The voice is left alone, and so are the text and its place.">Reset</button></div>
 </div>
 <div id="surfoot">
-  <span id="where"></span>
+  <span id="where" hidden></span>   <!-- the count of words: kept, unseen. User1, 16 xi 2026, the morning after publishing: it "could be excused from the bottom speaking bar, because its information is present in the minimaps" -->
   <label title="Whose voice: all are Ecouter, differently carried">Voice: <select autocomplete="off" id="voice" aria-label="Voice">
     <optgroup label="Women"><option value="nuage">Nuage</option><option value="miria">Miria</option><option value="lauren">Lauren</option></optgroup>
     <optgroup label="Men"><option value="obelus" selected>Obelus</option><option value="">Phillippe</option><option value="arthur">Arthur</option><option value="blando">Blando</option><option value="rudolf">Rudolf</option></optgroup>
