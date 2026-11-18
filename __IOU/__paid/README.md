@@ -11,3 +11,5 @@ To **Ecouter**:
   a0c8d79: the voices, by name.
 - [The tape, and a head that does not pop](ecouter/01-the-tape-and-its-head.md), paid 18 November 2026 by Ecouter's commit
   9230fae: the player ring.
+- [The room belongs after the head](ecouter/04-the-room-after-the-head.md), paid 18 November 2026: Ecouter's notes
+  (031ea1e), Resound in its player (9230fae), and the two-rooms question answered by ear. Both rooms stay.

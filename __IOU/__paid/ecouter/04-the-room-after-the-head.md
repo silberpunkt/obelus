@@ -48,3 +48,22 @@ One thing was found on the way: the lift and the return together raise the peak 
 which at full volume is clipped at the loudspeaker; so Ecouter's player opens at this page's volume, 0.8. Still owed:
 the two-rooms question. `examples/tape.html` now has the two rooms as two buttons, Mellow and Resound, so that an ear
 can try each alone and both together, backward as well as forward.
+
+## Paid
+
+18 November 2026. The last part was the two-rooms question, and it is answered by ear.
+
+User1 tried the two rooms in Ecouter's `examples/tape.html`, where Mellow (the room on the tape) and Resound (the room
+after the head) are two buttons. His answer: "I confess that while Mellow is vivid and immediate, the effect of
+Resound is nearly undetectable subjectively at the moment. Yet it sounds no worse and ... that settles it. Lauren
+achieves her depth with both. Please keep both."
+
+So two rooms are not one too many. Both stay, in Obelus as it opens and in Ecouter's player.
+
+One correction to what is written above. The rise in the peak was first measured over four voices, and found to be a
+third. Over all eight it is nearer a half (Nuage, Phillippe and Arthur the most), so Ecouter's player now opens at
+0.72 and not at this page's 0.8 (its commit 9f90631). On this page, at 0.8, Obelus himself stands clear; Arthur, Nuage and Phillippe may
+touch full scale now and then. That is noted here and not yet mended.
+
+The rest was settled before: Ecouter's notes say where a room belongs (its commit 031ea1e), and Resound itself is in
+its player ring (9230fae).

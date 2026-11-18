@@ -48,7 +48,7 @@
 | `index.html`, `obelus.html` | The page. The same file twice: one for the address, one to save by name. |
 | `obelus.yowl.yaml` | Its handbook: twenty-five cards, one for each part. Any YOWL reader opens it; it is also plain to read as text. |
 | `kinescope.html`, `kinescope-cake.html`, `fonts/` | Its two ancestors, kept as they were. |
-| `__IOU/` | What Obelus owes back to the work it stands on: four notes to Ecouter, with samples. Paid ones come to rest in `__IOU/__paid`. |
+| `__IOU/` | What Obelus owes back to the work it stands on: four notes to Ecouter, with samples. All four are paid, and at rest in `__IOU/__paid`. |
 | `ATTRIBUTION.md`, `LICENSE` | What it stands on, and the terms. |
 
 ## How it is made
