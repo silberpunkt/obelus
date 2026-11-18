@@ -34,7 +34,6 @@ considered.
 To **Ecouter** (https://github.com/silberpunkt/ecouter), checked against its commit 4c01db6 of 30 October 2026:
 
 1. [The tape, and a head that does not pop](ecouter/01-the-tape-and-its-head.md). Paid in part, 18 November 2026: the note and the guards. The example of the tape is still owed.
-3. [Three voices found by ear](ecouter/03-three-voices-found-by-ear.md)
 4. [The room belongs after the head](ecouter/04-the-room-after-the-head.md). Paid in part, 18 November 2026: Ecouter's notes now say where a room belongs. The two-rooms question still waits for an ear.
 
-Paid, and at rest in [`__paid`](__paid): the three things done to the score (IOU 2), 18 November 2026.
+Paid, and at rest in [`__paid`](__paid): the three things done to the score (IOU 2) and the voices found by ear (IOU 3), both 18 November 2026.
