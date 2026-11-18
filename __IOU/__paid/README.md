@@ -9,3 +9,5 @@ To **Ecouter**:
   2026 by Ecouter's commit 031ea1e: the score ring.
 - [Three voices found by ear](ecouter/03-three-voices-found-by-ear.md), paid 18 November 2026 by Ecouter's commit
   a0c8d79: the voices, by name.
+- [The tape, and a head that does not pop](ecouter/01-the-tape-and-its-head.md), paid 18 November 2026 by Ecouter's commit
+  9230fae: the player ring.

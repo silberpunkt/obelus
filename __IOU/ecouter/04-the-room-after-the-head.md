@@ -41,3 +41,10 @@ question has been answered by ear.
 18 November 2026, by Ecouter's commit 031ea1e. Ecouter's notes now say where a room belongs: laid into the sound for
 a voice played whole, and after the head for one that is scrubbed. Still owed: Resound itself, which belongs with the
 player that Ecouter does not yet have; and the two-rooms question, which nobody has yet listened for.
+
+18 November 2026, by Ecouter's commit 9230fae. Resound is paid: it is in Ecouter's player ring, with the three numbers
+as they stand above, after the head, and held in Ecouter's test against the room as Obelus makes it, to the last bit.
+One thing was found on the way: the lift and the return together raise the peak of the voice by as much as a third,
+which at full volume is clipped at the loudspeaker; so Ecouter's player opens at this page's volume, 0.8. Still owed:
+the two-rooms question. `examples/tape.html` now has the two rooms as two buttons, Mellow and Resound, so that an ear
+can try each alone and both together, backward as well as forward.

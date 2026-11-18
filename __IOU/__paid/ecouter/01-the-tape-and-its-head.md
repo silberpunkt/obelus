@@ -50,3 +50,25 @@ Ecouter's examples hold a player whose voice can be dragged; its running sound, 
 what Ecouter makes", with the table above in it. The two guards are in `examples/say.html`, and in the other two
 example pages as well; all three were opened and pressed in Chromium, Firefox and WebKit, and in a box made to refuse
 a context, without error. Still owed: `examples/tape.html`, a voice that can be dragged.
+
+## Paid
+
+18 November 2026, by Ecouter's commit 9230fae.
+
+Ecouter now has a player, its second ring: `ecouter-player.js`, beside the library as `ECOUTER.PLAYER`. It is this
+page's head with the line taken out of it: the tape is measured in seconds where ours is measured along a line of
+type. It runs on the audio thread, keeps the old head for an engine that has no worklet, and carries both guards. One
+thing was added on the way home: the head never jumps in loudness. Starting, stopping and being lifted are each a ramp
+of four thousandths of a second.
+
+`examples/tape.html` is the example that was owed: a sentence, the eight voices, a pace that runs through nought to
+backward, and a picture of the tape to take hold of.
+
+How it was told to be paid. Its running sound was caught in Chromium while it was played whole, dragged forward, held
+still, dragged backward, and turned round by the pace: no gaps and no clicks, the largest step between two samples
+0.06 of full scale. In a box made to refuse a context the page carries on and says that nothing can be heard. In
+Firefox and WebKit the head was run off line in each engine's own worklet, and spoke forward and backward. Then User1
+tried it by hand and ear: "It played perfectly by itself. I grabbed it... it moved the playhead and sounded out
+correctly as a record would, as a tape would." And: "I detected nothing wrong."
+
+Not done, and not owed: Obelus still reads its line with its own head. It may come to ask Ecouter for one.
