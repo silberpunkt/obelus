@@ -32,3 +32,23 @@ and the loop that reads `m.slots`.
 
 A page can write `ECOUTER.make` over a score that has been fitted, toned and sung by Ecouter's own functions, and
 Obelus's `lay` shrinks to calling them.
+
+## Paid
+
+18 November 2026, by Ecouter's commit 031ea1e.
+
+Ecouter now carries a score ring, `ecouter-score.js`, a file beside the library that hangs itself on as
+`ECOUTER.SCORE`. It has the three functions asked for, `fit(score, slots, gaps)`, `tone(score, k)` and
+`sing(score, amount, tonic)`, each pure and each returning a new score. Two more came with them because the three
+could not stand without them: `read`, which makes a score from a sentence's words, and `lift`, which raises the words
+inside quotation marks. A `say` sings the finished score.
+
+How it was told to be paid. Obelus's own `lay`, as it stood when this IOU was written, was copied into Ecouter's
+test, and the ring's output was held against it: 560 scores, equal to the last bit. Then Obelus's `lay` was shrunk to
+call the ring, which it now carries as Ecouter's module, and the page as it was and the page as it is each laid the
+same 80 sentences, in six voices, with and without the house finish. The sound was the same, sample for sample.
+
+The part of the debt that was shared with Audenare is settled with User1's leave: "I intend to release Audenare."
+The song goes into Ecouter with its credit.
+
+Steady was never ours to give back, and stays as thanks.

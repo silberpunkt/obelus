@@ -43,3 +43,10 @@ Two courtesies were learned on the way. A machine with no sound device refuses `
 
 Ecouter's examples hold a player whose voice can be dragged; its running sound, caught in Chromium, has no clicks; and
 `say.html` opens without error in a box that has no sound.
+
+## Paid in part
+
+18 November 2026, by Ecouter's commit 031ea1e. The note is written: `docs/how-it-works.md` has a section, "Playing
+what Ecouter makes", with the table above in it. The two guards are in `examples/say.html`, and in the other two
+example pages as well; all three were opened and pressed in Chromium, Firefox and WebKit, and in a box made to refuse
+a context, without error. Still owed: `examples/tape.html`, a voice that can be dragged.

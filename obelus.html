@@ -1529,6 +1529,149 @@ var LAUREN = { tone: 0.86, spd: 0.96, song: 0.43, steady: 0.65 };   // his tunin
 VOICES.rudolf = VOICES.arthur; var RUDOLF = { tone: 0.96, spd: 0.98, song: 0.61 };   // User1, 14 xi 2026: "a voice which resembled my mental imagination of Steiner", found while listening to him read by it   // User1's tuning of him, 13 xi 2026: "They come together into good character."
 </script>
 <script>
+/* score.js -- the score ring: things done to a score before it is sung.
+
+   A score is the list of frames a sentence is sung from. Everything here
+   is done to the score, before any sound exists, and so costs nothing in
+   the singing. Each function takes a score and gives back a new one; the
+   one it was handed is never changed.
+
+   These came home from Obelus (its IOU 2, 15 xi 2026), where they were one
+   function, lay, that fitted each word of a sentence to the width of that
+   word on a line of type. Obelus now owes nothing here but thanks.
+
+     var s = SCORE.read(['Is', 'it', 'you'], ['', '', '?']);   // { codes, word, frames }
+     s = SCORE.tone(s, 1.03);                    // pitch and throat together, by one factor
+     s = SCORE.fit(s, [180, 150, 420], [0, 0, 120]);   // each word made to last so many ms
+     s = SCORE.lift(s, [false, false, true]);    // these words a little higher, as inside quotation marks
+     s = SCORE.sing(s, 0.5);                     // half way from speech to song
+     ECOUTER.make({ frames: s.frames, ... })     // and then it is sung
+
+   A score here is { codes, word, frames }: the phoneme codes, the number of
+   the word each code belongs to, and the frames, each of which remembers
+   the code that made it (frame.ci). fit, lift and sing need the words;
+   tone needs only the frames.
+
+   SING is Audenare's (user1's, of this house): "the difference between
+   saying and singing is a quantiser, and the amount of it can be put on an
+   axis." */
+(function (root) {
+  'use strict';
+  var L = root.LEXILLOGUE || require('./lexillogue.js');
+  var P = root.PHONES || require('./phones.js');
+
+  function sounded(c) { return /[A-Za-z]/.test(c); }       // a phoneme code, as against a space or a stop
+  function copy(f) { var o = {}, k; for (k in f) o[k] = f[k]; return o; }
+  function again(score, frames) { return { codes: score.codes, word: score.word, frames: frames }; }
+
+  /* READ: words to a score. punct[j] is what follows word j: '.', '?', '!', ',' or nothing. A whole sentence is read
+     at once, so that its words run together and it has its tune: a fall at a full stop, a lift at a question. */
+  function read(words, punct, o) {
+    var codes = [], word = [], j, i, c;
+    punct = punct || []; o = o || {};
+    for (j = 0; j < words.length; j++) {
+      c = [];
+      try { c = P.split(L.say(words[j]).trim().replace(/ /g, '')).filter(sounded); } catch (e) {}
+      for (i = 0; i < c.length; i++) { codes.push(c[i]); word.push(j); }
+      codes.push(' '); word.push(j);
+      if (punct[j]) { codes.push(punct[j]); word.push(j); codes.push(' '); word.push(j); }
+    }
+    return { codes: codes, word: word, frames: P.frames(codes, { f0: o.f0 || 118 }) };
+  }
+
+  /* TONE (user1: "Tone and Speed controls would be ideal... little or no impact on the engine"). The tape itself
+     transposed: pitch and throat moved together, by one factor. Speed is not here: speed is how fast a tape is run. */
+  function tone(score, k) {
+    if (!k || k === 1) return again(score, score.frames.map(copy));
+    return again(score, score.frames.map(function (f) {
+      var o = copy(f);
+      if (o.f0) o.f0 *= k;
+      if (o.f) o.f = o.f.map(function (h) { return h * k; });
+      if (o.at) o.at = [o.at[0] * k, o.at[1] * k];
+      return o;
+    }));
+  }
+
+  /* FIT: each word made to last exactly as long as its place. slots[j] is the whole place of word j in ms, and
+     gaps[j] is how much of that place is a breath after it that is not the word's to fill (after a full stop, say).
+     The sounded part of a word is stretched or eased, between 0.6 and 1.7 of itself, toward 92 in the hundred of
+     its own room; the pause after it takes up the slack. If there is no room for a pause, the word takes the whole
+     of its place. */
+  function fit(score, slots, gaps) {
+    var codes = score.codes, word = score.word, fr = score.frames, W = slots.length, j, i, f;
+    var phon = new Float64Array(W), paus = new Float64Array(W), kp = [], kq = [];
+    gaps = gaps || [];
+    for (i = 0; i < fr.length; i++) { f = fr[i]; j = word[f.ci]; if (j === undefined) continue; if (sounded(codes[f.ci])) phon[j] += f.ms; else paus[j] += f.ms; }
+    for (j = 0; j < W; j++) {
+      var slot = slots[j], own = slot - (gaps[j] || 0);
+      var k = phon[j] ? Math.max(0.6, Math.min(1.7, own * 0.92 / phon[j])) : 1, rest = slot - k * phon[j];
+      if (!paus[j] || rest < 2) { rest = paus[j] ? 2 : 0; k = phon[j] ? Math.max(0.05, (slot - rest) / phon[j]) : 1; }
+      kp[j] = k; kq[j] = paus[j] ? rest / paus[j] : 1;
+    }
+    return again(score, fr.map(function (f) {
+      var j = word[f.ci], o = copy(f);
+      if (j !== undefined) o.ms = Math.max(0.5, f.ms * (sounded(codes[f.ci]) ? kp[j] : kq[j]));
+      return o;
+    }));
+  }
+
+  /* LIFT: the words flagged are pitched a little higher, as a line is lifted inside quotation marks. */
+  function lift(score, flags, k) {
+    k = k || 1.13;
+    return again(score, score.frames.map(function (f) {
+      var j = score.word[f.ci], o = copy(f);
+      if (j !== undefined && flags[j] && o.f0) o.f0 *= k;
+      return o;
+    }));
+  }
+
+  /* SING (user1, 13 xi 2026: "I want a slider between normal speech and song"). The method is Audenare's. Nothing is
+     changed but pitch. Each syllable is given ONE held pitch, a terrace, snapped to a gapped set with no semitone in
+     it (0 2 4 7 above a tonic, and the same again an octave up), and the voice's own pitch is blended toward that
+     terrace, in the log domain, by amount (0 is speech, 1 is song). One thing is added to Audenare, and said here
+     because it is a second variable: the careful reader moves through barely two and a half semitones, which snaps to
+     two notes and is a chant, not a song. So as amount rises the sentence's own tune is also widened, to three times
+     at the top, and each vowel's own height is let in: the close vowels (ee, oo) sit a little above the open ones
+     (ah). The melody is drawn from the sentence's tune and its words' vowels, and from nothing else.
+     tonic: the note the scale stands on, 113.3 Hz unless said. It goes with the voice: multiply it by whatever the
+     voice's pitch and tone have been multiplied by, since the grammar is a claim about intervals. */
+  var DEGREES = [0, 2, 4, 7, 12, 14, 16, 19];
+  var HEIGHT = { IY: 1, UW: 1, IH: 0.7, UH: 0.7, EY: 0.3, OW: 0.3, AE: -0.3, AA: -0.6, AY: -0.3, AW: -0.3 };
+  function vowel(c) { return /^(IY|IH|EY|EH|AE|AA|AO|OW|UH|UW|ER|AX|AH|AY|AW|OY)$/.test(c); }
+  function sing(score, amount, tonic) {
+    var codes = score.codes, word = score.word, out = score.frames.map(copy), sg = amount, TON = tonic || 113.3;
+    if (!(sg > 0)) return again(score, out);
+    var syl = [], a, b, i, q, vs, f, v, e;
+    for (i = 0; i < codes.length; i++) syl.push(-1);
+    for (a = 0; a < codes.length;) {                       // one word: each sound joins the vowel that follows it, or the last vowel
+      b = a; while (b < codes.length && word[b] === word[a]) b++;
+      vs = []; for (i = a; i < b; i++) if (vowel(codes[i])) vs.push(i);
+      for (i = a, q = 0; i < b; i++) { if (!sounded(codes[i])) continue; while (q < vs.length && vs[q] < i) q++; syl[i] = vs.length ? vs[Math.min(q, vs.length - 1)] : -1; }
+      a = b;
+    }
+    var sum = {}, held = {};
+    for (i = 0; i < out.length; i++) {
+      f = out[i]; v = syl[f.ci];
+      if (v === undefined || v < 0 || !f.f0 || !(f.voice > 0.03)) continue;
+      e = sum[v] || (sum[v] = [0, 0]); e[0] += Math.log(f.f0) * f.ms; e[1] += f.ms;
+    }
+    for (v in sum) {
+      e = sum[v];
+      var st = 12 * Math.log2(Math.exp(e[0] / e[1]) / TON) * (1 + 2 * sg) + (HEIGHT[codes[v]] || 0) * 3 * sg, best = DEGREES[0], d;
+      for (d = 0; d < DEGREES.length; d++) if (Math.abs(DEGREES[d] - st) < Math.abs(best - st)) best = DEGREES[d];
+      held[v] = TON * Math.pow(2, best / 12);
+    }
+    for (i = 0; i < out.length; i++) { f = out[i]; var h = held[syl[f.ci]]; if (h && f.f0) f.f0 = Math.exp((1 - sg) * Math.log(f.f0) + sg * Math.log(h)); }
+    return again(score, out);
+  }
+
+  var SCORE = { read: read, tone: tone, fit: fit, lift: lift, sing: sing, DEGREES: DEGREES, HEIGHT: HEIGHT };
+  if (typeof module !== 'undefined' && module.exports) module.exports = SCORE;
+  else root.SCORE = SCORE;
+})(typeof window !== 'undefined' ? window : this);
+
+</script>
+<script>
 'use strict';
 const MORTAR = new Set("a an the and or but so if then than that this these those there here it its it's is are was were be been being am do does did done doing have has had having will would shall should can could may might must of in on at to for from by with without within into onto out up down over under again further once about above below between through during before after i me my mine we us our ours you your yours he him his she her hers they them their theirs who whom whose which what when where why how all any both each few more most other some such no nor not only own same too very just now also even still yet ever never always often sometimes really actually basically thing things stuff kind sort lot lots bit way ways one two three said says say saying like well okay ok yeah yes right sure gonna wanna got get gets getting go goes going come comes coming know knows knowing think thinks thinking see sees seeing look looks looking mean means meaning let lets us please thank thanks as um uh oh".split(' '));
 const ZIPF = new Map();                      // the world's rate for about 5,900 words, as Zipf x 10 (wordfreq, 2026)
@@ -2045,7 +2188,7 @@ function drawTape() {
    Ecouter at once, so its words run together and it has its tune: a fall at a full stop, a lift at a question. Then
    each word of it is stretched or eased until it lasts exactly as long as that word is wide on the line (the pause
    after a word takes up the slack), so the sentence still lies along the tape place for place. The singing is done on
-   a second thread, which rides in this page and is made from the same four libraries; the sentence under the head and
+   a second thread, which rides in this page and is made from the same libraries; the sentence under the head and
    the two ahead of it, in whichever direction the line is going, are kept laid. If no second thread can be had, the
    page lays the track itself, and will hitch as it does. */
 const SR = 16000, STRIPQ = 0.6, VFADE = 2600, RLIFE = 1100, ROOM = 0.85, SWELL = 3, TOPCUT = 2;   // (ROOM is set by measure: the return before this lay 4.7 dB under the voice; 44 in the hundred of that is 11.8 dB under, and 0.85 gives it)   // ROOM: how much of the open air is let in; SWELL: decibels of lift at the chest of the voice
@@ -2064,39 +2207,24 @@ function voiceOf(i) { const key = tokQ[i] + tokSeg[i]; let e = vcache.get(key); 
   e = { ev, slot, word: w, ph: raw.ph, spr: null }; vcache.set(key, e); if (vcache.size > 20000) vcache.delete(vcache.keys().next().value); return e; }
 // One sentence, sung. Runs in the second thread (and here, if there is none). m: { words, punct, quote, slots (ms), sr }
 function lay(m) {
-  const codes = [], cw = [], isPhone = c => /[A-Za-z]/.test(c);
-  m.words.forEach((w, j) => { let c = []; try { c = PHONES.split(LEXILLOGUE.say(w).trim().replace(/ /g, '')).filter(isPhone); } catch (x) {}
-    for (const t of c) { codes.push(t); cw.push(j); } codes.push(' '); cw.push(j); if (m.punct[j]) { codes.push(m.punct[j]); cw.push(j); codes.push(' '); cw.push(j); } });
-  // TONE (User1: "Tone and Speed controls would be ideal... little or no impact on the engine"). Tone is the tape itself
-  // transposed: pitch and throat together, by one factor, written into the score before it is sung. It costs nothing.
-  // Speed is not here at all: it is how fast the line, and so the tape, is run.
-  const VC = VOICES[m.voice], tn = m.tone || 1, fr = arcFrames(PHONES.frames(codes, { f0: 118 }), VC).map(f => { if (tn === 1) return f; const o = Object.assign({}, f); if (o.f0) o.f0 *= tn; if (o.f) o.f = o.f.map(h => h * tn); if (o.at) o.at = [o.at[0] * tn, o.at[1] * tn]; return o; }), W = m.words.length, phon = new Float64Array(W), paus = new Float64Array(W);
-  for (const f of fr) { const j = cw[f.ci]; if (j === undefined) continue; if (isPhone(codes[f.ci])) phon[j] += f.ms; else paus[j] += f.ms; }
-  const kp = [], kq = [];
-  for (let j = 0; j < W; j++) { const slot = m.slots[j], own = slot - (m.gaps[j] || 0); let k = phon[j] ? Math.max(0.6, Math.min(1.7, own * 0.92 / phon[j])) : 1, rest = slot - k * phon[j];   // the breath after a sentence is not the word's to fill
-    if (!paus[j] || rest < 2) { rest = paus[j] ? 2 : 0; k = phon[j] ? Math.max(0.05, (slot - rest) / phon[j]) : 1; }      // no room for a pause: the word takes the whole of its place
-    kp[j] = k; kq[j] = paus[j] ? rest / paus[j] : 1; }
-  const out = fr.map(f => { const j = cw[f.ci], o = Object.assign({}, f); if (j !== undefined) { o.ms = Math.max(0.5, f.ms * (isPhone(codes[f.ci]) ? kp[j] : kq[j])); if (m.quote[j] && o.f0) o.f0 *= 1.13; } return o; });
-  // SPEECH TO SONG (User1, 13 xi 2026: "I want a slider between normal speech and song"). The method is Audenare's
-  // sing.py, and its claim: the difference between saying and singing is a quantiser, and the amount of it can be put
-  // on an axis. Nothing is changed but pitch, and it is changed in the score, before any sound exists. Each syllable
-  // is given ONE held pitch (a terrace), snapped to the gapped set with no semitone in it (0 2 4 7 above a tonic, and
-  // the same again an octave up), and the voice's own pitch is blended toward that terrace, in the log domain, by the
-  // slider. One thing is added to sing.py, and said here because it is a second variable: Ecouter's careful reader
-  // moves through barely two and a half semitones, which snaps to two notes and is a chant, not a song. So as the slider
-  // rises, the sentence's own tune is also widened (to three times at the top), and each vowel's own height is let
-  // in: in any voice the close vowels (ee, oo) sit a little above the open ones (ah). The melody is therefore drawn
-  // from the sentence's tune and its words' vowels, and from nothing else.
-  if (m.song > 0) { const sg = m.song, TON = 113.3 * (VC ? VC.pitch : 1) * tn,      // the tonic goes with the voice: the grammar is a claim about intervals
-       DEG = [0, 2, 4, 7, 12, 14, 16, 19], INTR = { IY: 1, UW: 1, IH: 0.7, UH: 0.7, EY: 0.3, OW: 0.3, AE: -0.3, AA: -0.6, AY: -0.3, AW: -0.3 };
-    const isV = c => /^(IY|IH|EY|EH|AE|AA|AO|OW|UH|UW|ER|AX|AH|AY|AW|OY)$/.test(c), syl = new Int32Array(codes.length).fill(-1);
-    for (let a = 0; a < codes.length;) { let b = a; while (b < codes.length && cw[b] === cw[a]) b++;       // one word: each sound joins the vowel that follows it, or the last vowel
-      const vs = []; for (let i = a; i < b; i++) if (isV(codes[i])) vs.push(i);
-      for (let i = a, q = 0; i < b; i++) { if (!isPhone(codes[i])) continue; while (q < vs.length && vs[q] < i) q++; syl[i] = vs.length ? vs[Math.min(q, vs.length - 1)] : -1; }
-      a = b; }
-    const sum = new Map(); for (const f of out) { const v = syl[f.ci]; if (v === undefined || v < 0 || !f.f0 || !(f.voice > 0.03)) continue; const e = sum.get(v) || [0, 0]; e[0] += Math.log(f.f0) * f.ms; e[1] += f.ms; sum.set(v, e); }
-    const held = new Map(); for (const [v, e] of sum) { const st = 12 * Math.log2(Math.exp(e[0] / e[1]) / TON) * (1 + 2 * sg) + (INTR[codes[v]] || 0) * 3 * sg; let best = DEG[0]; for (const d of DEG) if (Math.abs(d - st) < Math.abs(best - st)) best = d; held.set(v, TON * Math.pow(2, best / 12)); }
-    for (const f of out) { const h = held.get(syl[f.ci]); if (h && f.f0) f.f0 = Math.exp((1 - sg) * Math.log(f.f0) + sg * Math.log(h)); } }
+  // THE SCORE RING (18 xi 2026). What this function used to do to a score with its own hands, it now asks of Ecouter,
+  // to whom it was owed: SCORE.read, tone, fit, lift and sing, which came home from here as Obelus's IOU 2 and are
+  // carried in this page as Ecouter's own module. Before the change the two were compared, and gave the same sound to
+  // the last bit. What each does, in the order it is done:
+  //   read   the sentence is read whole, so its words run together and it has its tune.
+  //   (arc)  the arc of the voice chosen is laid over it. That is a voice's matter, and stays here for now.
+  //   tone   (User1: "Tone and Speed controls would be ideal... little or no impact on the engine"). The tape itself
+  //          transposed: pitch and throat together, by one factor, written into the score before it is sung. Speed
+  //          is not here at all: it is how fast the line, and so the tape, is run.
+  //   fit    each word stretched or eased until it lasts exactly as long as it is wide on the line; the breath after
+  //          a sentence is not the word's to fill.
+  //   lift   inside quotation marks the voice is pitched a little higher.
+  //   sing   SPEECH TO SONG (User1, 13 xi 2026: "I want a slider between normal speech and song"). Audenare's method:
+  //          each syllable given one held pitch, snapped to a gapped scale, and the voice's own pitch blended toward it
+  //          by the slider. The tonic goes with the voice: the grammar is a claim about intervals.
+  const VC = VOICES[m.voice], tn = m.tone || 1, read = SCORE.read(m.words, m.punct);
+  const arced = { codes: read.codes, word: read.word, frames: arcFrames(read.frames, VC) };
+  const out = SCORE.sing(SCORE.lift(SCORE.fit(SCORE.tone(arced, tn), m.slots, m.gaps), m.quote), m.song || 0, 113.3 * (VC ? VC.pitch : 1) * tn).frames;
   // THE FINISH (User1, 13 xi 2026: "The house finish would much help to sensibly blur and blend the white-noise generation
   // with tonal-phonal sounds. In the human voice these are continuous"). Ecouter's own bench, chain.js, at the house
   // setting Nuage uses ('Worn, 79, stockinged, entoned'): the throat, the gust, 79 in the hundred of the ruler, the

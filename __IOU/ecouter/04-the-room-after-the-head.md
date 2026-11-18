@@ -35,3 +35,9 @@ listened for whether that is one too many.
 
 Ecouter's notes say where a room belongs for a voice that is played and for one that is scrubbed, and the two-rooms
 question has been answered by ear.
+
+## Paid in part
+
+18 November 2026, by Ecouter's commit 031ea1e. Ecouter's notes now say where a room belongs: laid into the sound for
+a voice played whole, and after the head for one that is scrubbed. Still owed: Resound itself, which belongs with the
+player that Ecouter does not yet have; and the two-rooms question, which nobody has yet listened for.
